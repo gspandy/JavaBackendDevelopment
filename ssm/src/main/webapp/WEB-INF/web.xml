@@ -1,0 +1,98 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>Archetype Created Web Application</display-name>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <!--context-param该元素用来声明应用范围(整个WEB项目)内的上下文初始化参数-->
+    <!--此时用于SpringMVC配置，一般用于加载除Web层的Bean（如Dao、Service等），以便于与其他任何Web框架集成。-->
+    <context-param>
+        <!--设定上下文的参数名称。必须是唯一名称-->
+        <param-name>contextConfigLocation</param-name>
+        <!--设定的参数名称的值-->
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <!--监听器Listener就是在application,session,request三个对象创建、-->
+    <!--销毁或者往其中添加修改删除属性时自动执行代码的功能组件。-->
+    <!--Listener是Servlet的监听器，可以监听客户端的请求，服务端的操作等。-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--定义DispatcherServlet的实例，并设置初始化参数-->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-dispatcher-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!--定义名为dispatcher这个Servlet实例处理url的模型-->
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--配置spring编码-->
+    <!-- 配置字符编码过滤器，编码格式设为UTF-8，避免中文乱码 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value> <!--设置你想用的字符集，我这里用的是UTF-8-->
+        </init-param>
+        <!--强制使用该编码-->
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern> <!--设置你想过滤的页面或者是Servlet，根据自己的需要配置-->
+    </filter-mapping>
+
+    <!-- WebStatFilter用于采集web-jdbc关联监控的数据-->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <!--排除监控的数据-->
+            <param-name>exclusions</param-name>
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/font/*,/druid/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--配置Druid统计监控页面的servlet-->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <init-param>
+            <!-- 配置配置Druid统计监控页面的用户名 -->
+            <param-name>loginUsername</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+        <init-param>
+            <!--  配置配置Druid统计监控页面的密码 -->
+            <param-name>loginPassword</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <!--配置Druid统计监控页面的url-->
+        <!--访问路径根路径：http://localhost:8888/druid-->
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>

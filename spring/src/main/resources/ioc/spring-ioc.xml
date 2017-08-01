@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Spring的IOC-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--向容器注册AutowiredAnnotationBeanPostProcessor（@Autowired）、CommonAnnotationBeanPostProcessor（@ Resource 、@ PostConstruct、@ PreDestroy）、-->
+    <!--PersistenceAnnotationBeanPostProcessor （@PersistenceContext）和RequiredAnnotationBeanPostProcessor （@Required）这 4 个BeanPostProcessor。-->
+    <!--不注册就不能使用@Autowired、@Resource、@PostConstruct、@PreDestroy、@PersistenceContext、@Required。-->
+    <!--context:annotation-config同时隐式地注册这四个bean，使得我们的程序可以使用那些注解。-->
+    <context:annotation-config></context:annotation-config>
+    <!--扫描指定包中，@Repository，@Service，@Controller，@Component四个注解标记的类，还可以扫描@Configuration下面的@Bean-->
+    <!--为它们创建一个bean，这个bean的id默认与类同名，但是首字母小写-->
+    <context:component-scan base-package="com.lavor.spring.ioc"/>
+    <bean id="user" class="com.lavor.spring.ioc.User">
+        <constructor-arg name="id" value="1"/>
+        <constructor-arg name="name" value="lavor"/>
+    </bean>
+    <!--还可以设置autowire属性来为这个bean中所有的字段尽可能地注入其他的bean-->
+    <bean id="userIOC" class="com.lavor.spring.ioc.UserIOC"/>
+</beans>

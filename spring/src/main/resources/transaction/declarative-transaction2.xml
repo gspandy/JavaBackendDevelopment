@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/test"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+    </bean>
+
+
+
+    <!-- 定义事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+
+    </bean>
+
+    <!-- 配置Dao-->
+    <bean id="userDaoImpl" class="com.lavor.spring.transaction.UserDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="transactionProxyFactoryBean" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+    abstract="true">
+        <!-- 配置事务管理器 -->
+        <property name="transactionManager" ref="transactionManager"/>
+        <!-- 配置事务属性 -->
+        <property name="transactionAttributes">
+            <props>
+                <!--添加属性键，即目标对象中需要自动添加事务的方法-->
+                <!--这里是目标对象中，所有以“insert”开头的方法-->
+                <!--PROPAGATION_REQUIRED是事务传播的方式-->
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <!--多个Bean可以共享同一个代理TransactionProxyFactoryBean-->
+    <bean name="userDaoImplBean" parent="transactionProxyFactoryBean">
+        <property name="target" ref="userDaoImpl"/>
+    </bean>
+    <bean name="userDaoImplBean1" parent="transactionProxyFactoryBean">
+        <property name="target" ref="userDaoImpl"/>
+    </bean>
+</beans>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应着该mapper对应的Dao-->
+<mapper namespace="com.lavor.mybatis.UserDao">
+
+    <!--默认情况返回类型中的字段会与数据库中字段的小写形式对应起来-->
+    <!--当对应不起来的时候，我们可以通过手动设置resultMap来将Java类型中字段与数据库中的列对应起来-->
+    <!--autoMapping=”true”这个是打开自动映射,不然只会映射你配置的那些属性-->
+    <resultMap id="userResultMap" type="com.lavor.mybatis.User" autoMapping="true">
+        <!--主键的对应关系设置-->
+        <id property="id" column="id" javaType="integer" jdbcType="INTEGER"></id>
+        <!--非主键的对应关系设置-->
+        <result property="name" column="name"></result>
+    </resultMap>
+    <!--普通查询，返回一条结果-->
+    <select id="selectUserById" resultMap="userResultMap" parameterType="integer">
+        select * from user where id=#{id}
+    </select>
+    <!--普通查询，返回n条结果,数据保存到List中-->
+    <select id="selectAllUser" resultType="com.lavor.mybatis.User">
+        select * from user
+    </select>
+    <!--一对一的查询，还可以使用resultMap与association实现一对一查询-->
+    <select id="selectUserInfoAndNameById" resultType="com.lavor.mybatis.UserInfoAndName" parameterType="integer">
+        select userinfo.*,user.name from userinfo,user where userinfo.user_id=user.id and user.id=#{id}
+    </select>
+
+    <!--collection用于一对多查询，association用于一对一查询-->
+    <resultMap id="orderListAndName" type="com.lavor.mybatis.OrderListAndName">
+         <result property="name" column="name"></result>
+        <collection property="orderList" ofType="com.lavor.mybatis.Order">
+            <id property="id" column="id"></id>
+            <result property="order_number" column="order_number"></result>
+            <result property="user_id" column="user_id"></result>
+        </collection>
+    </resultMap>
+    <!--一对多查询-->
+    <select id="selectOrderListAndNameById" resultMap="orderListAndName" parameterType="integer">
+        select userorder.*,user.name from userorder,user where userorder.user_id=user.id and user.id=#{id}
+    </select>
+
+    <!--延迟加载，查询所有user表中的id，然后根据id查找所有order表中的数据-->
+    <!--查找所有用户，返回的是resultMap类型，在其中定义具体的延迟加载方式-->
+    <select id="findUser" resultMap="userMap">
+        SELECT * FROM user;
+    </select>
+    <!--根据用户id查询订单-->
+    <select id="findOrderLazy" parameterType="int" resultType="com.lavor.mybatis.Order">
+        SELECT * FROM userorder WHERE user_id=#{id}
+    </select>
+    <!--//resultMap映射-->
+    <resultMap id="userMap" type="com.lavor.mybatis.OrderListAndId" autoMapping="true">
+        <id  property="id" column="id"/>
+        <!--select表示延迟加载时要调用的那个sql语句，column表示要传入的参数-->
+        <!--select中的sql语句不在同一个mapper中时，要加载它的namespace-->
+        <collection property="orderList" ofType="com.lavor.mybatis.Order"
+                    autoMapping="true" select="findOrderLazy" column="id">
+        </collection>
+    </resultMap>
+
+    <!--动态语句查询-->
+    <select id="selectUserByName"  resultType="com.lavor.mybatis.User" parameterType="com.lavor.mybatis.User">
+        SELECT  * FROM user where id= 1
+        <!--sql动态语句，当id大于0时，加上后面的语句-->
+        <if test="id>0">
+            and name=#{name}
+        </if>
+    </select>
+
+    <!--插入一条不带id的数据,返回自增的id-->
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(name) VALUES ('jack')
+    </insert>
+</mapper>

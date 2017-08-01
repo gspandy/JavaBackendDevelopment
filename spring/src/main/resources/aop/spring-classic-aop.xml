@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Spring经典的基于代理的AOP-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置被代理类Human的bean，也就是Spring AOP中的目标-->
+    <bean id="human" class="com.lavor.spring.aop.Human"/>
+    <!--配置代理类HumanClassicAOP的bean，也就是Spring AOP中的通知-->
+    <bean id="humanClassicAOP" class="com.lavor.spring.aop.HumanClassicAOP"/>
+    <!--配置Spring AOP中的切入点，切点为以sleep为后缀的方法-->
+    <bean id="point" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+        <property name="pattern" value=".*sleep"/>
+    </bean>
+    <!--配置Spring AOP中的切面，切面由切入点和通知组成，所以会设置pointcut（切入点）和advice（通知）-->
+    <bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="point"/>
+        <property name="advice" ref="humanClassicAOP"/>
+    </bean>
+    <!--配置Spring AOP中的代理，target是目标，proxyInterfaces表示可以将该bean转换成实现指定接口的代理对象，interceptorNames是代理的拦截器（此时是Spring AOP中的切面）-->
+    <bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="human"/>
+        <property name="proxyInterfaces" value="com.lavor.spring.aop.Sleepable"/>
+        <property name="interceptorNames" value="advisor"/>
+    </bean>
+</beans>

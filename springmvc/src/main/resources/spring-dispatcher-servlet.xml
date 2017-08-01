@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--静态资源(css、js、image、html等)的访问，如果不定义就不能在DispatcherServlet拦截的请求中访问静态资源-->
+    <mvc:default-servlet-handler/>
+    <!--它是一种简写形式，完全可以手动配置替代这种简写形式，简写形式可以让初学者快速应用默认配置方案。-->
+    <!--它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean。-->
+    <!--是spring MVC为@Controllers分发请求所必须的。-->
+    <!--并提供了：数据绑定支持，@NumberFormatannotation支持，@DateTimeFormat支持，@Valid支持，读写XML的支持（JAXB），-->
+    <!--读写JSON的支持（Jackson）。-->
+    <mvc:annotation-driven/>
+    <!--配置控制器的Bean，它处理http://localhost:8080/javaController请求-->
+    <bean id="/javaController" class="com.lavor.springmvc.JavaController"/>
+    <!--自动扫描指定包及其子包中的四大注解形成的Bean，还有通过JavaConfig形式配置的Beam-->
+    <context:component-scan base-package="com.lavor.springmvc"/>
+    <!--创建多部分解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+
+    <!--配置全局异常类-->
+    <bean id="exceptionResolver" class="com.lavor.springmvc.GlobalExceptionResolver"/>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!--定义异常与视图的映射关系-->
+        <property name="exceptionMappings">
+            <props>
+                <!-- NumberFormatException异常对应着的视图-->
+                <prop key="NumberFormatException">/error/simple.jsp</prop>
+                <prop key="NullPointerException">/error/simple.jsp</prop>
+            </props>
+        </property>
+        <!-- 指定所有没有指定的异常,都跳转到该页面，默认的异常视图页面 -->
+        <property name="defaultErrorView" value="/error/page.jsp"/>
+        <!-- 指定所有没有指定的异常对应的HttpServletResponse的返回码，默认的返回码 -->
+        <property name="defaultStatusCode" value="500"/>
+        <!-- 定义发生异常时视图跟返回码的对应关系 -->
+        <property name="statusCodes">
+            <props>
+                <prop key="/error/simple.jsp">500</prop>
+                <prop key="/error/simple.jsp">500</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--拦截请求的映射关系，拦截/interceptor请求-->
+            <mvc:mapping path="/interceptor"/>
+            <bean class="com.lavor.springmvc.Interceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--转换器是在Controller中起作用的，所以需要放在Dispatcher对应的配置文件中-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.lavor.springmvc.StringToDateConverter">
+                    <constructor-arg type="java.lang.String" value="MM-dd-yyyy">
+                    </constructor-arg>
+                </bean>
+            </set>
+        </property>
+    </bean>
+    <!--将conversionService加入到自动转换服务中来-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+    <bean id="conversionService2" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="com.lavor.springmvc.DateFormatter">
+                    <constructor-arg type="java.lang.String" value="MM/dd/yyyy">
+                    </constructor-arg>
+                </bean>
+            </set>
+        </property>
+    </bean>
+    <mvc:annotation-driven conversion-service="conversionService2"/>
+
+    <!--国际化资源信息，国际化的配置也是在这里进行-->
+    <!--设置Spring自带框架验证器的错误代码对应的错误信息存放的地方，id必须是messageSource-->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <!--配置语言区域解析器的bean,AcceptHeaderLocaleResolver（默认的）解析的是Header语言区域，还可以使用SessionLocaleResolver
+    和CookieLocaleResolver，它们分别解析的是Session和Cookie中的语言区域-->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"/>
+
+
+    <!--此时错误消息键值的查找会先到messageSource这个bean配置的messages.properties中找，-->
+    <!--找不到再到classpath下`ValidationMessages.properties中找,
+    还找不到就到默认的错误消息文件（/org/hibernate/validator/ValidationMessages.properties）中找。-->
+    <mvc:annotation-driven validator="validator"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!--如果是3.1之前已经默认注入AnnotationMethodHandlerAdapter，
+    3.1之后默认注入RequestMappingHandlerAdapter只需加上jackson-databind.jar和jackson-core即可!
+    手动开启方法如下：-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
+          p:ignoreDefaultModelOnRedirect="true">
+        <property name="messageConverters">
+            <list>
+                <!--它可以自动处理请求中的json数据，并且将返回的数据封装成json数据传给前台-->
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--&lt;!&ndash;配置ViewResolver&ndash;&gt;-->
+    <!--<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="prefix" value="/error/"></property>-->
+    <!--</bean>-->
+</beans>

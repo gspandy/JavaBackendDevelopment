@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应着该mapper对应的Dao-->
+<mapper namespace="com.lavor.mybatis.AnnotationUserDao">
+    <resultMap id="userMapXML" type="com.lavor.mybatis.User" autoMapping="true">
+        <!--主键的对应关系设置-->
+        <id property="id" column="id" javaType="integer" jdbcType="INTEGER"></id>
+        <!--非主键的对应关系设置-->
+        <result property="name" column="name"></result>
+    </resultMap>
+</mapper>

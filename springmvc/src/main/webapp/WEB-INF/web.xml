@@ -1,0 +1,57 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <!--context-param该元素用来声明应用范围(整个WEB项目)内的上下文初始化参数-->
+  <!--此时用于SpringMVC配置，一般用于加载除Web层的Bean（如Dao、Service等），以便于与其他任何Web框架集成。-->
+  <context-param>
+    <!--设定上下文的参数名称。必须是唯一名称-->
+    <param-name>contextConfigLocation</param-name>
+    <!--设定的参数名称的值-->
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+
+  <!--监听器Listener就是在application,session,request三个对象创建、-->
+  <!--销毁或者往其中添加修改删除属性时自动执行代码的功能组件。-->
+  <!--Listener是Servlet的监听器，可以监听客户端的请求，服务端的操作等。-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--定义DispatcherServlet的实例，并设置初始化参数-->
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <!--DispatcherServlet是前置控制器，配置在web.xml文件中的。拦截匹配的请求，Servlet拦截匹配规则要自己定义，-->
+    <!--把拦截下来的请求，依据相应的规则分发到目标Controller来处理，是配置spring MVC的第一步。-->
+    <!--DispatcherServlet是前端控制器设计模式的实现，提供Spring Web MVC的集中访问点，而且负责职责的分派，-->
+    <!--而且与Spring IoC容器无缝集成，从而可以获得Spring的所有好处。-->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-dispatcher-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <!--定义名为dispatcher这个Servlet实例处理url的模型-->
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <!--/会匹配到/mvc这样的路径型url，不会匹配到模式为*.jsp这样的后缀型url-->
+    <!--如果是/*会匹配所有的url：路径型的和后缀型的url(包括/mvc，.jsp，.js和*.html等-->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--定义错误页面-->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error/404.html</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error/500.html</location>
+  </error-page>
+</web-app>

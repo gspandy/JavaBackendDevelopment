@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--开启二级缓存,默认也是开启状态的-->
+        <setting name="cacheEnabled" value="true"/>
+
+        <!--延迟加载的配置，延迟加载可以解决1+N问题-->
+        <!--开启热部署-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--关闭积极加载,也就是设置为按需要加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+
+    </settings>
+
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"></transactionManager>
+            <!--设置数据源-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/test"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--设置MySQL的数据库方言-->
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="MySQL" value="mysql"/>
+    </databaseIdProvider>
+
+</configuration>

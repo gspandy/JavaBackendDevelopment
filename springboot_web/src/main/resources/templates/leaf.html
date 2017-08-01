@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <!--版本号方式管理静态资源版本-->
+    <link type="text/css" th:href="${urls.getForLookupPath('/css/lavor.css') }"/>
+    <script  src="/webjarslocator/jquery/jquery.js"></script>
+</head>
+<body>
+<!--MD5方式管理静态资源版本-->
+<img th:src="${urls.getForLookupPath('/image/lavor.png') }"/>
+<div>
+    <!--变量表达式-->
+    <span th:text="${user.name}"/>
+</div>
+<div th:object="${user}">
+    <!--选择表达式，效果与${user.name}相同-->
+    <span th:text="*{name}"/>
+</div>
+<div>
+    <!--文本国际化表达式，可进行国际化处理 -->
+    <!--默认读取classpath下的messages.properties，我们改成了home.properties -->
+    <span th:text="#{language}"/>
+</div>
+</body>
+</html>
