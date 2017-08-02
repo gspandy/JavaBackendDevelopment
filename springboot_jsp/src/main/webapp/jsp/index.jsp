@@ -13,6 +13,5 @@
 <body>
 <h2>我是index.jsp</h2>
 <%--部署到外部项目时注意，Controller中/表示项目根目录，页面中/表示服务器根目录--%>
-<a href="hello">hello</a>
 </body>
 </html>
