@@ -22,6 +22,7 @@ import java.util.Date;
 /**
  * 控制器的使用：使用@Controller实现控制器，一个控制器只能处理多个请求
  * 一般采用此种方式来实现控制器
+ * 注意：Controller中/表示项目根目录，页面中/表示服务器根目录
  * Created by shitian on 2017/7/5.
  */
 @Controller

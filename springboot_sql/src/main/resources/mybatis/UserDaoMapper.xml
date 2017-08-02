@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应着该mapper对应的Dao-->
+<mapper namespace="com.lavor.springboot.sql.mybatis.UserDaoMapper">
+    <!--普通查询，返回一条结果-->
+    <select id="selectUserById" resultType="com.lavor.springboot.sql.mybatis.User" parameterType="integer">
+        select * from user where id=#{id}
+    </select>
+</mapper>

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
+ * 使用注解操作数据库的mybatis实例
  * Created by lei.zeng on 2017/7/28.
  */
 public class AnnotationUserDaoCase {
@@ -25,12 +26,9 @@ public class AnnotationUserDaoCase {
         Configuration configuration=sessionFactory.getConfiguration();
         //将AnnotationUserDao.class作为Mapper添加到configuration中
         configuration.addMapper(AnnotationUserDao.class);
-        configuration.addLoadedResource("AnnotationUserDao.xml");
-
 
         //获取可以操作数据库的Dao
         AnnotationUserDao annotationUserDao = session.getMapper(AnnotationUserDao.class);
-//        annotationUserDao.selectUserById(1);
         annotationUserDao.selectAllUser();
     }
 }

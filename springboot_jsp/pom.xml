@@ -28,6 +28,9 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+
+            </exclusions>
         </dependency>
         <!--tomcat，可以不需要spring-boot-starter-web中自带该依赖-->
         <dependency>
