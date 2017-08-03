@@ -2,9 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>index</title>
+    <title>Spring Boot Actuator实时监控</title>
 </head>
 <body>
-<h2>我是index.html</h2>
+<h2 align="center">Actuator主要暴露的功能</h2>
+<table align="center">
+    <thead><tr>
+        <th align="left">HTTP方法</th>
+        <th align="left">路径</th>
+        <th align="left">描述</th>
+        <th align="left">鉴权</th>
+    </tr></thead>
+    <tbody>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/autoconfig">/autoconfig</a></td>
+        <td align="left">查看自动配置的使用情况</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/configprops">/configprops</a></td>
+        <td align="left">查看配置属性，包括默认配置</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/beans">/beans</a></td>
+        <td align="left">查看bean及其关系列表</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/dump">/dump</a></td>
+        <td align="left">打印线程栈</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/env">/env</a></td>
+        <td align="left">查看所有环境变量</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/health">/health</a></td>
+        <td align="left">查看应用健康指标</td>
+        <td align="left">false</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/info">/info</a></td>
+        <td align="left">查看应用信息</td>
+        <td align="left">false</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/mappings">/mappings</a></td>
+        <td align="left">查看所有url映射</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/metrics">/metrics</a></td>
+        <td align="left">查看应用基本指标</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/metrics/mem">/metrics/{name}</a></td>
+        <td align="left">查看具体指标</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">POST</td>
+        <td align="left"><a href="/shutdown">/shutdown</a></td>
+        <td align="left">关闭应用</td>
+        <td align="left">true</td>
+    </tr>
+    <tr>
+        <td align="left">GET</td>
+        <td align="left"><a href="/trace">/trace</a></td>
+        <td align="left">查看基本追踪信息</td>
+        <td align="left">true</td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

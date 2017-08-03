@@ -1,5 +1,6 @@
 package com.lavor.springboot.shiro;
 
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -34,6 +35,8 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
         //为安全管理器设置realm
         securityManager.setRealm(getShiroRealm());
+        //为安全管理器设置缓存管理器（用来缓存授权信息）
+        securityManager.setCacheManager(getEhCacheManager());
         return securityManager;
     }
 
@@ -120,5 +123,12 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
+    }
+
+    @Bean
+    public EhCacheManager getEhCacheManager() {
+        EhCacheManager em = new EhCacheManager();
+        em.setCacheManagerConfigFile("classpath:ehcache.xml");
+        return em;
     }
 }

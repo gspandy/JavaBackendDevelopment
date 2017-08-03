@@ -19,6 +19,7 @@ public class UserInfoService {
         userPermissionList.add(userPermission);
         userRole.setPermissions(userPermissionList);
         List<UserRole> userRoleList=new ArrayList<>();
+        userRoleList.add(userRole);
         return new UserInfo("root","123456",userRoleList);
     }
 }
