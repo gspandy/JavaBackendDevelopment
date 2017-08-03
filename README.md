@@ -6,7 +6,7 @@
 
 ## spring模块
 本模块使用了aspectj，因此需要下载`AspectJ Support`插件，这样就可以在Intellij Idea编译aspectj文件了。
-还需要将Java编译器从Javac改为Ajc,如下图所示：
+还需要将Java编译器从Javac改为Ajc,`bytecode`都改为1.8,如下图所示：
 ![](http://i.imgur.com/XfGt33o.jpg)
 
 如果找不到ajpectj对应的class文件，那么就单独对该ajpectj文件进行编译。

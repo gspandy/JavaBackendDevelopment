@@ -23,6 +23,9 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
+  <!--Servlet优先进行精准匹配，然后进行模糊匹配-->
+
+
   <!--定义DispatcherServlet的实例，并设置初始化参数-->
   <servlet>
     <servlet-name>dispatcher</servlet-name>
