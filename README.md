@@ -48,24 +48,17 @@ logback日志管理。
 
 ## springboot_sql
 
-springboot_sql模块的知识体系如下： 
+springboot_sql模块的知识体系如下：   
 ![](http://i.imgur.com/vCrbuDS.png)  
 
 ## springboot_cache
 
-springboot_cache模块的知识体系如下： 
+springboot_cache模块的知识体系如下：   
 ![](http://i.imgur.com/3yyqy9x.png)
 
 ## springboot_task
 
 异步任务与定时任务。
-
-
-## springboot_cache
-
-springboot_cache模块的知识体系如下： 
-![](http://i.imgur.com/3yyqy9x.png)
-
 
 ## springboot_muticontext
 

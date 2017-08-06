@@ -56,7 +56,7 @@ public class UserRealm extends AuthorizingRealm {
         //获取用户输入密码，不要直接使用(String)authenticationToken.getCredentials()，
         // 否则会出错，导致身份验证失败
         String password = new String((char[])authenticationToken.getCredentials());
-        //通过username从数据库中查找 User对象，如果找到，没找到.
+        //通过username从数据库中查找 User对象。
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         UserInfo userInfo = userInfoService.findByUsername("root");
         if(userInfo == null){
