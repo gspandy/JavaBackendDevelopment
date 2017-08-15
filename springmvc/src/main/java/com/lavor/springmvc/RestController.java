@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * RESTful API中，URL中只使用名词来指定资源，原则上不使用动词
  * Rest用HTTP协议里的动词来实现资源的增删改查等操作，Rest一般传递的是json数据
  * 关于json数据的传递可以参考JsonAndAjaxController
- * 比如GET（查询资源），POST（新建或者更新资源），PUT（修改资源中的信息），PATCH（整体替换资源），DELETE（删除资源）
+ * 比如GET（查询资源），POST（新建资源），PUT（整体更新（替換）资源或者新建资源），PATCH（局部更新资源），DELETE（删除资源）
  * Created by shitian on 2017-07-16.
  */
 @Controller
